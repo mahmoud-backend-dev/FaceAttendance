@@ -6,7 +6,7 @@ const Attendance = require('../models/Attendance');
 exports.addAttendance = asyncHandler(async (req, res) => {
   let attendance = await Attendance.findOne({ user: req.body.user });
   if (attendance) 
-    return res.send('Already attended')
+    return res.status(StatusCodes.BAD_REQUEST).msg({ msg: 'Already attended' })
   attendance = await Attendance.create(req.body);
   res.status(StatusCodes.OK).json({ data: attendance });
 });
