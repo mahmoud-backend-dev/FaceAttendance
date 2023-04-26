@@ -12,6 +12,9 @@ const attendanceSchema = new mongoose.Schema({
   attendance_time: {
     type: String,
   },
+  recognition_face: {
+    type:String,
+  }
 });
 
 module.exports = mongoose.model('Attendance', attendanceSchema);
