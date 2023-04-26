@@ -1,11 +1,15 @@
+const fs = require('fs').promises;
 const asyncHandler = require('express-async-handler');
 const { StatusCodes } = require('http-status-codes');
 const User = require('../models/Users');
 const { santizeData } = require('../utils/santizeData');
-const { BadRequestError, UnauthenticatedError } = require('../errors');
+const { NotFoundError, BadRequest } = require('../errors');
 
-const register =asyncHandler( async (req, res) => {
-    req.body.image = `${process.env.BASE_URL}/image/${req.file.filename}`;
+exports.register = asyncHandler(async (req, res) => {
+    const ext = req.file.mimetype.split('/')[1];
+    const idImage = `${req.body.empolyeeId}.${ext}`
+    await fs.rename(req.file.path,req.file.path.replace(req.file.filename,idImage))
+    req.body.image = `${process.env.BASE_URL}/image/${idImage}`;
     const user = await User.create(req.body);
     const token = user.createJWT();
     res
@@ -13,22 +17,21 @@ const register =asyncHandler( async (req, res) => {
         .json({ user: santizeData(user), token });
 });
 
-const login = async (req, res) => {
+exports.login = async (req, res) => {
     const { email, password } = req.body;
-    if (!email || !password)
-        throw new BadRequestError('Please provide email, password');
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email, role: 'admin' });
     if (!user)
-        throw new UnauthenticatedError('Invalid Credentials')
+        throw new NotFoundError(`No such user for this id: ${req.body.email}`)
     const isPasswordCorrect = await user.comparePassword(password);
-    if (!isPasswordCorrect)
-        throw new UnauthenticatedError('Invalid Credentials')
-    
+    if ( !isPasswordCorrect)
+        throw new BadRequest('Password incorrect')
     const token = user.createJWT();
-    res.status(StatusCodes.OK).json({ user: { name: user.name }, token });
+    res.status(StatusCodes.OK).json({ user: santizeData(user), token });
 };
 
-module.exports = {
-    register,
-    login,
-}
+exports.getUserByID = asyncHandler(async (req, res) => {
+    const user = await User.findOne({ empolyeeId: req.params.id });
+    res.status(StatusCodes.OK).json({ user: santizeData(user) });
+})
+
+

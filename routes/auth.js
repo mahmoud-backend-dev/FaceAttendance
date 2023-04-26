@@ -7,13 +7,16 @@ const {
 
 const {
   register,
-  login
+  login,
+  getUserByID,
 } = require('../controller/auth');
 const {
-  registerValidator
+  registerValidator,
+  getUserValidator
 } = require('../utils/validators/authValidator')
 
 router.post('/register', uploadSingleImage('image', 'image'), registerValidator, register);
-router.post('/login',login);
+router.post('/login', login);
+router.get('/getUserId/:id', getUserValidator, getUserByID);
 
 module.exports = router;

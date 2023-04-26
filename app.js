@@ -15,6 +15,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean')
 
 const authRoute = require('./routes/auth');
+const attendanceRoute = require('./routes/attendace');
 const errorHandler = require('./middleware/error-handler');
 const notFoundErr = require('./middleware/notFoundMiddleware');
 const connectDB = require('./db/connectDB');
@@ -55,6 +56,7 @@ app.use(hpp())
 
 
 app.use('/api/v1/auth', authRoute);
+app.use('/api/v1/attendance', attendanceRoute);
 app.use(errorHandler);
 app.use(notFoundErr);
 

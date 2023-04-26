@@ -11,8 +11,14 @@ const UserSchema = new mongoose.Schema({
     password: {
         type:String
     },
+    role: {
+        type: String,
+        enum: ['user', 'admin'],
+        default:'user',
+    },
     empolyeeId: {
         type: Number,
+        unique: true
     },
     department: {
         type: String,
@@ -22,8 +28,11 @@ const UserSchema = new mongoose.Schema({
     },
     image: {
         type:String,
-    }
-});
+    },
+
+},
+    { timestamps: true }
+);
 
 UserSchema.hashPass = async function (next) {
     this.password = await bcrypt.hash(this.password, 12);
