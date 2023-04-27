@@ -10,7 +10,7 @@ const multerOptions = (path) => {
         filename: function (req, file, cb) {
             // category-{id}-Date.now().jpeg
             const ext = file.mimetype.split('/')[1];
-            const filename = `${req.body.empolyeeId}-${Date.now()}.${ext}`;
+            const filename = `${path}-${Date.now()}.${ext}`;
             cb(null, filename);
         }
     });

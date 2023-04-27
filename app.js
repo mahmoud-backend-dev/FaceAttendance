@@ -14,6 +14,11 @@ const hpp = require('hpp');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean')
 
+// Setup Swagger UI
+const swaggerUI = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load('./swagger.yaml');
+
 const authRoute = require('./routes/auth');
 const attendanceRoute = require('./routes/attendace');
 const errorHandler = require('./middleware/error-handler');
@@ -27,6 +32,10 @@ app.options('*', cors());
 
 // Compress all responses
 app.use(compression());
+
+// for Swagger Ui StartUp an running live server
+app.get('/', (req, res) => res.redirect('/api-docs'));
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

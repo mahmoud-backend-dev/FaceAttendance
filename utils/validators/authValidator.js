@@ -1,7 +1,7 @@
 const { body, param} = require('express-validator');
 const { BadRequest } = require('../../errors');
 const validationMiddleWare = require('../../middleware/validatorMiddleware');
-const User = require('../../models/Users');
+const User = require('../../models/User');
 
 exports.registerValidator = [
   body('name').notEmpty().withMessage('Name Required'),
@@ -28,5 +28,43 @@ exports.getUserValidator = [
     if (!user)
       throw new BadRequest(`No user such as this id: ${val}`);
   }),
+  validationMiddleWare
+];
+
+
+
+exports.forgetPasswordValidator = [
+  body('email').notEmpty().withMessage('E-mail required'),
+  validationMiddleWare,
+];
+
+exports.verifyResetCodeValidator = [
+  body('email').notEmpty().withMessage('E-mail Required'),
+  body('resetCode').notEmpty().withMessage('Reset Code Required'),
+  validationMiddleWare
+];
+
+exports.resetPasswordValidator = [
+  body('email').notEmpty().withMessage('E-mail Required'),
+  body('newPassword').notEmpty().withMessage('New Password Required')
+    .isLength({ min: 6 }).withMessage('Too short password enter more than 6 characters'), 
+  validationMiddleWare
+];
+
+
+exports.registerAsAdminValidator = [
+  body('name').notEmpty().withMessage('Name Required'),
+  body('email').notEmpty().withMessage('E-mail Required'),
+  body('password').notEmpty().withMessage('Password Required')
+    .isLength({ min: 6 }).withMessage('Too short password enter more than 6 characters'),
+  validationMiddleWare
+];
+
+
+exports.registerAsManagerValidator = [
+  body('name').notEmpty().withMessage('Name Required'),
+  body('email').notEmpty().withMessage('E-mail Required'),
+  body('password').notEmpty().withMessage('Password Required')
+    .isLength({ min: 6 }).withMessage('Too short password enter more than 6 characters'), 
   validationMiddleWare
 ]

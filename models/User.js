@@ -13,7 +13,7 @@ const UserSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['user', 'admin'],
+        enum: ['user', 'admin','manager'],
         default:'user',
     },
     empolyeeId: {
@@ -29,14 +29,16 @@ const UserSchema = new mongoose.Schema({
     image: {
         type:String,
     },
-
+        hashedResetCode: String,
+    expiredResetCode: Date,
+    verifiyResetCode: Boolean,
 },
     { timestamps: true }
 );
 
-UserSchema.hashPass = async function (next) {
+UserSchema.methods.hashPass = async function () {
     this.password = await bcrypt.hash(this.password, 12);
-    next();
+    this.save();
 };
 
 UserSchema.methods.createJWT = function () {
