@@ -21,5 +21,9 @@ exports.addAttendValidator = [
     }),
   body('date').notEmpty().withMessage('Date Required'),
   body('attendance_time').notEmpty().withMessage('Time Required'),
+  body('image').custom(async (val, { req }) => {
+    if (!req.file)
+      throw new BadRequest('Please provide image for image Contant-Type = multipart/form-data or enctype equal multipart/form-data');
+  }),
   validationMiddleWare,
 ]
