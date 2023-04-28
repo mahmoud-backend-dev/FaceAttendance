@@ -23,6 +23,8 @@ const {
 
 router.post(
   '/',
+  authMiddleWare,
+  allowTo('manager'),
   addAttendValidator,
   addAttendance)
 router.patch('/:id',
