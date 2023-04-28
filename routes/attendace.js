@@ -27,6 +27,7 @@ router.post(
   allowTo('manager'),
   addAttendValidator,
   addAttendance)
+
 router.patch('/:id',
   authMiddleWare,
   allowTo('manager'),
