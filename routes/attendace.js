@@ -9,16 +9,28 @@ const {
 
 const {
   addAttendValidator,
-  getAttendanceValidator
+  getAttendanceValidator,
+  addFaceValidator
 } = require('../utils/validators/attendanceValidator');
 
 const { uploadSingleImage } = require('../middleware/uploadImageMiddleWare');
 
 const {
   addAttendance,
-  getAttendanceByDate
+  getAttendanceByDate,
+  addFaceAddendance
 } = require('../controller/attendance');
 
-router.post('/', authMiddleWare, allowTo('manager'), uploadSingleImage('image', 'Face'), addAttendValidator, addAttendance);
+router.post(
+  '/',
+  addAttendValidator,
+  addAttendance)
+router.patch('/:id',
+  authMiddleWare,
+  allowTo('manager'),
+  uploadSingleImage('image', 'Face'),
+  addFaceValidator,
+  addFaceAddendance)
+
 router.get('/', authMiddleWare, allowTo('admin'), getAttendanceValidator, getAttendanceByDate);
 module.exports = router;

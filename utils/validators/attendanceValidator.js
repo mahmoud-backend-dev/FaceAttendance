@@ -1,4 +1,4 @@
-const { body,query } = require('express-validator');
+const { body,query,param } = require('express-validator');
 const { BadRequest } = require('../../errors');
 const validationMiddleWare = require('../../middleware/validatorMiddleware');
 const Attendance = require('../../models/Attendance');
@@ -21,6 +21,16 @@ exports.addAttendValidator = [
     }),
   body('date').notEmpty().withMessage('Date Required'),
   body('attendance_time').notEmpty().withMessage('Time Required'),
+  validationMiddleWare,
+];
+
+
+exports.addFaceValidator = [
+  param('id').custom(async (val) => {
+    const attendace = await Attendance.findById(val)
+    if (!attendace)
+      throw new BadRequest(`No such id attendance for this: ${val}`)
+  }),
   body('image').custom(async (val, { req }) => {
     if (!req.file)
       throw new BadRequest('Please provide image for image Contant-Type = multipart/form-data or enctype equal multipart/form-data');
