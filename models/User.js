@@ -18,7 +18,7 @@ const UserSchema = new mongoose.Schema({
     },
     empolyeeId: {
         type: Number,
-        unique: true
+        // unique: true
     },
     department: {
         type: String,

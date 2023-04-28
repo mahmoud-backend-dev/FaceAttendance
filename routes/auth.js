@@ -15,7 +15,8 @@ const {
   resetPassword,
   registerAsAdmin,
   registerAsManager,
-  allowTo
+  allowTo,
+  getAllImages
 } = require('../controller/auth');
 
 const {
@@ -38,5 +39,6 @@ router.post('/forgetPassword', forgetPasswordValidator, forgetPassword);
 router.post('/verifyResetCode', verifyResetCodeValidator, verifyResetCode);
 router.post('/resetPassword', resetPasswordValidator, resetPassword);
 
+router.get('/images', authMiddleWare, allowTo('manager'), getAllImages);
 
 module.exports = router;

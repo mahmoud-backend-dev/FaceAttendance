@@ -10,7 +10,6 @@ const {
 const {
   addAttendValidator,
   getAttendanceValidator,
-  addFaceValidator
 } = require('../utils/validators/attendanceValidator');
 
 const { uploadSingleImage } = require('../middleware/uploadImageMiddleWare');
@@ -32,6 +31,7 @@ router.post(
 )
 
 
-
 router.get('/', authMiddleWare, allowTo('admin'), getAttendanceValidator, getAttendanceByDate);
+
+
 module.exports = router;

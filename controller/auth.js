@@ -152,4 +152,11 @@ exports.resetPassword = asyncHandler(async (req, res) => {
     res.status(StatusCodes.OK).json({ status: "Success", token, user: santizeData(user) });
 });
 
-
+  // @decs Get All Images
+  // @route POST /api/v1/auth/images
+  // @ptotect Private
+exports.getAllImages = asyncHandler(async (req, res) => {
+    const images = await User.find({}).select('image -_id ');
+    const arrayOfImages = images.map((value) => value.image);
+    res.status(StatusCodes.OK).json({ status: "Success", count: images.length, arrayOfImages });
+})
