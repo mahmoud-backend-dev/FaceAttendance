@@ -8,6 +8,14 @@ const Attendance = require('../models/Attendance');
 // @route POST /api/v1/attendance
 // @ptotect Private
 exports.addAttendance = asyncHandler(async (req, res) => {
+  console.log('Ahmed atef');
+  const boundary = 'my-custom-boundary';
+  
+  
+  // Set the Content-Type header with the specified boundary value
+  req.headers['Content-Type'] = `multipart/form-data; boundary=${boundary}`;
+  console.log(req.headers['Content-Type']);
+
   const now = new Date(req.body.date);
   let attendance = await Attendance.findOne({ user: req.body.user, date: now });
   if (attendance) 
