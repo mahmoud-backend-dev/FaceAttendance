@@ -10,9 +10,9 @@ const Attendance = require('../models/Attendance');
 exports.addAttendance = asyncHandler(async (req, res) => {
   const now = new Date(req.body.date);
   let attendance = await Attendance.findOne({ user: req.body.user, date: now });
-  // if (attendance) {
-  //   return res.status(StatusCodes.BAD_REQUEST).json({ msg: 'Already attended' })
-  // }
+  if (attendance) {
+    return res.status(StatusCodes.BAD_REQUEST).json({ msg: 'Already attended' })
+  }
   attendance = await Attendance.create(req.body);
   res.status(StatusCodes.OK).json({status:'Success', data: attendance });
 });
