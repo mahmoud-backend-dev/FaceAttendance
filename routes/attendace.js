@@ -18,29 +18,20 @@ const { uploadSingleImage } = require('../middleware/uploadImageMiddleWare');
 const {
   addAttendance,
   getAttendanceByDate,
-  addFaceAddendance,
-  addAttendanceTest
 } = require('../controller/attendance');
 
 
-router.post('/test',  authMiddleWare,
-  allowTo('manager'),
-  uploadSingleImage('image', 'Face'),
-  addAttendanceTest
-)
+
 router.post(
   '/',
   authMiddleWare,
   allowTo('manager'),
-  addAttendValidator,
-  addAttendance)
-
-router.patch('/:id',
-  authMiddleWare,
-  allowTo('manager'),
   uploadSingleImage('image', 'Face'),
-  addFaceValidator,
-  addFaceAddendance)
+  addAttendValidator,
+  addAttendance
+)
+
+
 
 router.get('/', authMiddleWare, allowTo('admin'), getAttendanceValidator, getAttendanceByDate);
 module.exports = router;

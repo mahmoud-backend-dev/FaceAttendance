@@ -1,3 +1,4 @@
+const fs = require('fs');
 const asyncHandler = require('express-async-handler');
 const { StatusCodes } = require('http-status-codes');
 const Attendance = require('../models/Attendance');
@@ -11,20 +12,7 @@ exports.addAttendance = asyncHandler(async (req, res) => {
   const now = new Date(req.body.date);
   let attendance = await Attendance.findOne({ user: req.body.user, date: now });
   if (attendance) {
-    return res.status(StatusCodes.BAD_REQUEST).json({ msg: 'Already attended' })
-  }
-  attendance = await Attendance.create(req.body);
-  res.status(StatusCodes.OK).json({status:'Success', data: attendance });
-});
-
-
-// @decs Add Attendance
-// @route POST /api/v1/attendance/test
-// @ptotect Private
-exports.addAttendanceTest = asyncHandler(async (req, res) => {
-  const now = new Date(req.body.date);
-  let attendance = await Attendance.findOne({ user: req.body.user, date: now });
-  if (attendance) {
+    fs.unlinkSync(req.file.path);
     return res.status(StatusCodes.BAD_REQUEST).json({ msg: 'Already attended' })
   }
   req.body.recognition_face = `${process.env.BASE_URL}/Face/${req.file.filename}`;
@@ -32,18 +20,6 @@ exports.addAttendanceTest = asyncHandler(async (req, res) => {
   res.status(StatusCodes.OK).json({status:'Success', data: attendance });
 });
 
-// @decs Add Face Attendance
-// @route PATCH /api/v1/attendance/:id
-// @ptotect Private
-exports.addFaceAddendance = asyncHandler(async (req, res) => {
-  req.body.recognition_face = `${process.env.BASE_URL}/Face/${req.file.filename}`;
-  const addFace = await Attendance.findByIdAndUpdate(
-    req.params.id,
-    req.body,
-    { new: true }
-  );
-  res.status(StatusCodes.OK).json({ status: "Success", data: addFace });
-})
 
 // @decs Get Attendance By Date
 // @route POST /api/v1/attendance?date=2023-04-27
