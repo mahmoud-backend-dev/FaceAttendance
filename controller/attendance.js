@@ -12,6 +12,7 @@ exports.addAttendance = asyncHandler(async (req, res) => {
   const now = new Date(req.body.date);
   let attendance = await Attendance.findOne({ user: req.body.user, date: now });
   if (attendance) {
+    fs.unlinkSync(req.file.path);
     return res.status(StatusCodes.BAD_REQUEST).json({ msg: 'Already attended' })
   }
   req.body.recognition_face = `${process.env.BASE_URL}/Face/${req.file.filename}`;
