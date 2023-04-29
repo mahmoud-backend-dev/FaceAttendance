@@ -1,4 +1,3 @@
-const fs = require('fs').promises;
 const crypto = require('crypto');
 const asyncHandler = require('express-async-handler');
 const { StatusCodes } = require('http-status-codes');
@@ -50,9 +49,6 @@ exports.registerAsManager = asyncHandler(async (req, res) => {
 // @route POST /api/v1/auth/register
 // @ptotect Public
 exports.register = asyncHandler(async (req, res) => {
-    const ext = req.file.mimetype.split('/')[1];
-    const idImage = `${req.body.empolyeeId}.${ext}`
-    await fs.rename(req.file.path,req.file.path.replace(req.file.filename,idImage))
     req.body.image = req.secure_url;
     const user = await User.create(req.body);
     const token = user.createJWT();

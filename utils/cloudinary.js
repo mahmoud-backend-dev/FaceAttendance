@@ -1,5 +1,5 @@
-const cloudinary = require('cloudinary').v2;
 const fs = require('fs');
+const cloudinary = require('cloudinary').v2;
 const asyncHandler = require('express-async-handler');
 // Configuration  Cloudinary
 cloudinary.config({
@@ -10,12 +10,29 @@ cloudinary.config({
 
 
 // Upload to cloudianry
-const uploadToCloudianry = asyncHandler(async (req, res, next) => {
-    const data = await cloudinary.uploader.upload(req.file.path, { folder: 'Face Attendance System' });
-    req.secure_url = data.secure_url;
-    fs.unlinkSync(req.file.path);
-    next();
+exports.uploadToCloudianry = asyncHandler(async (req, res, next) => {
+  let path = req.file.path;
+  let data;
+  if (req.body.empolyeeId) {
+    const ext = req.file.mimetype.split('/')[1];
+    const idImage = `${req.body.empolyeeId}.${ext}`
+    path = `./uploads/image/${idImage}`
+    data = await cloudinary.uploader.upload(path, {
+      public_id:req.body.empolyeeId,
+      folder: 'FaceAttendanceSystem',
+    });
+  } else {
+    data = await cloudinary.uploader.upload(path, {
+      public_id:req.file.originalname,
+      folder: 'FaceAttendanceSystem',
+    }); 
+  }
+  req.secure_url = data.secure_url;
+  fs.unlinkSync(path);
+  next();
 });
 
-module.exports = uploadToCloudianry
+exports.removeImageFromCloudianry = async (public_id) => {
+  await cloudinary.uploader.destroy(public_id);
+}
 

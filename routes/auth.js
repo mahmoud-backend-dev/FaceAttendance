@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const authMiddleWare = require('../middleware/authMiddleware');
-const uploadToCloudianry = require('../utils/cloudinary');
+const {uploadToCloudianry} = require('../utils/cloudinary');
 
 const {
   uploadSingleImage
@@ -33,7 +33,7 @@ const {
 
 router.post('/registerAsAdmin', registerAsAdminValidator, registerAsAdmin);
 router.post('/registerAsManager', registerAsManagerValidator, registerAsManager);
-router.post('/register', uploadSingleImage('image', 'image'), registerValidator,uploadToCloudianry, register);
+router.post('/register', uploadSingleImage('image', 'image'), registerValidator, uploadToCloudianry, register);
 router.post('/login', login);
 router.get('/getUserId/:id', authMiddleWare, allowTo('manager'),getUserValidator, getUserByID);
 

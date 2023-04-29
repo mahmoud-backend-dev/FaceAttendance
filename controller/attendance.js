@@ -1,8 +1,8 @@
-const fs = require('fs');
+
 const asyncHandler = require('express-async-handler');
 const { StatusCodes } = require('http-status-codes');
 const Attendance = require('../models/Attendance');
-
+const {removeImageFromCloudianry} = require('../utils/cloudinary')
 
 
 // @decs Add Attendance
@@ -12,7 +12,8 @@ exports.addAttendance = asyncHandler(async (req, res) => {
   const now = new Date(req.body.date);
   let attendance = await Attendance.findOne({ user: req.body.user, date: now });
   if (attendance) {
-    fs.unlinkSync(req.file.path);
+    console.log(req.file.filename);
+    removeImageFromCloudianry(req.file.filename);
     return res.status(StatusCodes.BAD_REQUEST).json({ msg: 'Already attended' })
   }
   req.body.recognition_face = req.secure_url;

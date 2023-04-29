@@ -27,3 +27,4 @@ exports.addAttendValidator = [
   }),
   validationMiddleWare,
 ];
+

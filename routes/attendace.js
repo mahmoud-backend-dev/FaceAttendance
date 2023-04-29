@@ -3,7 +3,7 @@ const router = express.Router();
 
 const authMiddleWare = require('../middleware/authMiddleware');
 
-const uploadToCloudianry = require('../utils/cloudinary');
+const {uploadToCloudianry} = require('../utils/cloudinary');
 
 const {
   allowTo
