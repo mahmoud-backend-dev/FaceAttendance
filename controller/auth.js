@@ -55,7 +55,6 @@ exports.register = asyncHandler(async (req, res) => {
     await fs.rename(req.file.path,req.file.path.replace(req.file.filename,idImage))
     req.body.image = `${process.env.BASE_URL}/image/${idImage}`;
     const user = await User.create(req.body);
-    await user.hashPass();
     const token = user.createJWT();
     res
         .status(StatusCodes.CREATED)
