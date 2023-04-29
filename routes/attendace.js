@@ -3,6 +3,8 @@ const router = express.Router();
 
 const authMiddleWare = require('../middleware/authMiddleware');
 
+const uploadToCloudianry = require('../utils/cloudinary');
+
 const {
   allowTo
 } = require('../controller/auth')
@@ -27,6 +29,7 @@ router.post(
   allowTo('manager'),
   uploadSingleImage('image', 'Face'),
   addAttendValidator,
+  uploadToCloudianry,
   addAttendance
 )
 

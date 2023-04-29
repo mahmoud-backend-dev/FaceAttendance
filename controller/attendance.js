@@ -15,7 +15,7 @@ exports.addAttendance = asyncHandler(async (req, res) => {
     fs.unlinkSync(req.file.path);
     return res.status(StatusCodes.BAD_REQUEST).json({ msg: 'Already attended' })
   }
-  req.body.recognition_face = `${process.env.BASE_URL}/Face/${req.file.filename}`;
+  req.body.recognition_face = req.secure_url;
   attendance = await Attendance.create(req.body);
   res.status(StatusCodes.OK).json({status:'Success', data: attendance });
 });

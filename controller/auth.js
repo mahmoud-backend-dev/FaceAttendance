@@ -53,7 +53,7 @@ exports.register = asyncHandler(async (req, res) => {
     const ext = req.file.mimetype.split('/')[1];
     const idImage = `${req.body.empolyeeId}.${ext}`
     await fs.rename(req.file.path,req.file.path.replace(req.file.filename,idImage))
-    req.body.image = `${process.env.BASE_URL}/image/${idImage}`;
+    req.body.image = req.secure_url;
     const user = await User.create(req.body);
     const token = user.createJWT();
     res
