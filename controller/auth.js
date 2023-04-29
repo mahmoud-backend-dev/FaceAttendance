@@ -156,7 +156,7 @@ exports.resetPassword = asyncHandler(async (req, res) => {
   // @route POST /api/v1/auth/images
   // @ptotect Private
 exports.getAllImages = asyncHandler(async (req, res) => {
-    const images = await User.find({}).select('image -_id ');
+    const images = await User.find({ image: { $exists: true } }).select('image -_id ');
     const arrayOfImages = images.map((value) => value.image);
     res.status(StatusCodes.OK).json({ status: "Success", count: images.length, arrayOfImages });
 })
