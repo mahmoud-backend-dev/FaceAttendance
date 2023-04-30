@@ -23,7 +23,7 @@ exports.uploadToCloudianry = asyncHandler(async (req, res, next) => {
     });
   } else {
     data = await cloudinary.uploader.upload(path, {
-      public_id:req.file.originalname,
+      public_id:req.file.originalname.split('.')[0],
       folder: 'FaceAttendanceSystem',
     }); 
   }
@@ -33,6 +33,12 @@ exports.uploadToCloudianry = asyncHandler(async (req, res, next) => {
 });
 
 exports.removeImageFromCloudianry = async (public_id) => {
-  await cloudinary.uploader.destroy(public_id);
+  try {
+    
+    await cloudinary.uploader.destroy(public_id);
+    console.log(`Image with public ID ${public_id} has been deleted from Cloudinary.`);
+  } catch (error) {
+    console.error(`Error deleting image with public ID ${public_id}: ${error}`);
+  }
 }
 
