@@ -13,17 +13,23 @@ exports.getAttendanceValidator = [
 ]
 
 exports.addAttendValidator = [
-  body('user').notEmpty().withMessage('User Required')
-    .custom(async (val) => {
-      const user = await User.findById(val);
-      if (!user)
-        throw new BadRequest(`No such email for this :${val}`);
-    }),
   body('date').notEmpty().withMessage('Date Required'),
   body('attendance_time').notEmpty().withMessage('Time Required'),
   body('image').custom(async (val, { req }) => {
     if (!req.file)
       throw new BadRequest('Please provide image for image Contant-Type = multipart/form-data or enctype equal multipart/form-data');
+  }),
+  body('user').notEmpty().withMessage('User Required')
+    .custom(async (val, { req }) => {
+    const user = await User.findById(val);
+      if (!user) {
+        throw new BadRequest(`No such email for this :${val}`);
+      }
+      const now = new Date(req.body.date);
+      let attendance = await Attendance.findOne({ user: req.body.user, date: now });
+      if (attendance) {
+        throw new BadRequest('Already attended')
+      }
   }),
   validationMiddleWare,
 ];

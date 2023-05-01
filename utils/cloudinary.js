@@ -32,13 +32,5 @@ exports.uploadToCloudianry = asyncHandler(async (req, res, next) => {
   next();
 });
 
-exports.removeImageFromCloudianry = async (public_id) => {
-  try {
-    
-    await cloudinary.uploader.destroy(public_id);
-    console.log(`Image with public ID ${public_id} has been deleted from Cloudinary.`);
-  } catch (error) {
-    console.error(`Error deleting image with public ID ${public_id}: ${error}`);
-  }
-}
+
 

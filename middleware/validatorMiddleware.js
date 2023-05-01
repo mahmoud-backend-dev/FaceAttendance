@@ -20,7 +20,6 @@ const validatorMiddleWare = async (req, res, next) => {
         return res.status(400).json({ errors: errors.array() });
     }
     if (req.body.empolyeeId) {
-        console.log("dsad");
         const ext = req.file.mimetype.split('/')[1];
         const idImage = `${req.body.empolyeeId}.${ext}`
         fs.rename(req.file.path, req.file.path.replace(req.file.filename, idImage), (err) => {
